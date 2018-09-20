@@ -25,8 +25,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     //(sqrt(2)) i.e. max length(uv) can be
     float R = 1.41421356237;
     
-    float r = length(uv);
-    float b = 0.5 + r/R * (PI-0.5);
+    // sin(iTime) makes it zoom in and shit its funky as fuck
+    float r = length(uv) * sin(iTime/2.);
+    float b = 0.5 + abs(r/R) * (PI-0.5);
     float a = atan(uv.y, uv.x) + PI * iTime * 5.;
     
     //r/f = a (equation of a spiral)
@@ -34,6 +35,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     
     // See if the desired angle is within the current angle (a)
     float result = in_angle_range(desired_angle, a-b, a+b);   
-    fragColor = (vec4(0,0,1,1) * (1.-r/R) + ((r/R) * vec4(0,1,0,1))) * result + vec4(.25,0,.5,1) * (1.-result);   
+    fragColor = (vec4(0,0,1,1) * (1.-abs(r/R)) + (abs((r/R)) * vec4(0,1,0,1))) * result + vec4(.25,0,.5,1) * (1.-result);   
     
 }
